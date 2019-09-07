@@ -21,6 +21,7 @@ module.exports = (context, next) => {
         '--headless',
         '--convert-to',
         context.input.format,
+        context.input.options,
         source
     ]);
     

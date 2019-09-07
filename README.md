@@ -17,7 +17,7 @@ Run the following commands to get up and running.
 git clone https://github.com/sgbj/versed.git
 cd versed
 docker build -t versed .
-docker run -d -p 3000:3000 versed
+docker run -d -e API_KEY=fdhsfjhdsjkghfdjkghfdgiurz -p 3000:3000 versed
 ```
 
 Open a browser window and go to http://localhost:3000/.

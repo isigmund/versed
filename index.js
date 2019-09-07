@@ -30,34 +30,45 @@ app.post('/convert', upload.single('file'), function (req, res, next) {
     const mimetype = mime.lookup(req.file.originalname);
     const type = mimetype.split('/')[0];
 
-    // Run file through the pipeline
-    middleware.run({
-        input: {
-            format: req.body.format,
-            filename: req.file.originalname,
-            mimetype: mimetype,
-            type: type,
-            buffer: req.file.buffer
-        }
-    }, (context) => {
-        if (context.error) {
-            console.error(context.error);
-        }
+    // check api-key
+    console.log('env: ' + process.env.API_KEY);
+    console.log('key: ' + req.body.api_key);
+    if ( process.env.API_KEY != req.body.api_key) {
+        console.error('Invalid api-key');
+        res.status(401).end();
+    }
+    else {
 
-        // Send the result or error
-        if (context.output) {
-            res.writeHead(200, {
-                'Content-Type': mime.lookup(context.input.format),
-                'Content-disposition': 'attachment;filename=' 
-                    + path.basename(context.input.filename, path.extname(context.input.filename)) 
-                    + '.' + req.body.format,
-                'Content-Length': context.output.buffer.length
-            });
-            res.end(context.output.buffer);
-        } else {
-            res.status(500).end();
-        }
-    });
+        // Run file through the pipeline
+        middleware.run({
+            input: {
+                format: req.body.format,
+                options: req.body.options,
+                filename: req.file.originalname,
+                mimetype: mimetype,
+                type: type,
+                buffer: req.file.buffer
+            }
+        }, (context) => {
+            if (context.error) {
+                console.error(context.error);
+            }
+
+            // Send the result or error
+            if (context.output) {
+                res.writeHead(200, {
+                    'Content-Type': mime.lookup(context.input.format),
+                    'Content-disposition': 'attachment;filename=' 
+                        + path.basename(context.input.filename, path.extname(context.input.filename)) 
+                        + '.' + req.body.format,
+                    'Content-Length': context.output.buffer.length
+                });
+                res.end(context.output.buffer);
+            } else {
+                res.status(500).end();
+            }
+        });
+    }   
 });
 
 app.listen(3000, function () {
