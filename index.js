@@ -31,8 +31,6 @@ app.post('/convert', upload.single('file'), function (req, res, next) {
     const type = mimetype.split('/')[0];
 
     // check api-key
-    console.log('env: ' + process.env.API_KEY);
-    console.log('key: ' + req.body.api_key);
     if ( process.env.API_KEY != req.body.api_key) {
         console.error('Invalid api-key');
         res.status(401).end();
