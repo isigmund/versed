@@ -3,7 +3,9 @@ File conversion can be a pain. Especially when you're trying to automate it. Tha
 
 Versed exposes a web API for converting files, and also comes with a simple web frontend for manual file conversion. 
 
-![Versed frontend](https://user-images.githubusercontent.com/5178445/29902290-c7bd44d4-8dc2-11e7-9aca-6ff17b264971.png)
+
+![Versed frontend](screenshot.png)
+
 
 It's currently powered by LibreOffice and FFmpeg, which means it supports the same file formats that those tools support, but you can easily add more tools to its arsenal.
 
@@ -21,6 +23,14 @@ docker run -d -e API_KEY=fdhsfjhdsjkghfdjkghfdgiurz -p 3000:3000 versed
 ```
 
 Open a browser window and go to http://localhost:3000/.
+
+## API Key
+The environment variable API_KEY sets the expected API key. Each call must provide exactely this API Key otherwise the conversion is cancelled.
+
+## Filter options
+For file types that are converted with libreoffice the filter options allow further control on how the conversion is done.    
+E.g the filter option `--infilter=CSV:44,34,UTF8,,,,true` ensures that the text is interpreted as UTF-8 when converting a CSV file. More information on possible filter option can be found here https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filter_Options 
+
 
 ## Calling it from Node
 
